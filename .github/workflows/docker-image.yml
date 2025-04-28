@@ -1,0 +1,36 @@
+name: CI/CD Pipeline for RPS GUI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.13'
+
+    - name: Install dependencies
+      run: pip install tk
+
+    - name: Run tests (if any)
+      run: echo "No tests provided. Skipping..."
+
+    - name: Log in to Docker Hub
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+
+    - name: Build and Push Docker Image
+      run: |
+        docker build -t amanuddinu4/rps-gui:latest .
+        docker push amanuddinu4/rps-gui:latest
