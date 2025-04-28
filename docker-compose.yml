@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: rps_gui_app
+    volumes:
+      - .:/app
+    environment:
+      - DISPLAY=host.docker.internal:0.0 # For GUI display on host
+    ports:
+      - "5000:5000"
